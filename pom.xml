@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.cjqcn</groupId>
+    <artifactId>tiny-statemachine</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <modules>
+        <module>tiny-statemachine-core</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <name>cjqCN</name>
+            <email>15521255460@163.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/cjqCN/tiny-statemachine.git</connection>
+        <url>https://github.com/cjqCN/tiny-statemachine.git</url>
+        <developerConnection>scm:git:git@github.com:cjqCN/tiny-statemachine.git</developerConnection>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <surefire.redirectTestOutputToFile>true</surefire.redirectTestOutputToFile>
+        <slf4j.version>1.7.25</slf4j.version>
+        <lombok.version>1.18.6</lombok.version>
+        <jmh.version>1.23</jmh.version>
+        <junit.version>4.12</junit.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
