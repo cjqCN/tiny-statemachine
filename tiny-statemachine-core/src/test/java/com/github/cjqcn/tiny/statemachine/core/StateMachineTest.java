@@ -1,6 +1,8 @@
 package com.github.cjqcn.tiny.statemachine.core;
 
 
+import static com.github.cjqcn.tiny.statemachine.core.impl.Util.from;
+
 import com.github.cjqcn.tiny.statemachine.core.impl.StateMachineManagerBuilderImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,32 +14,37 @@ public class StateMachineTest {
 
     @Before
     public void setUp() {
-        StateMachineManagerBuilder builder = new StateMachineManagerBuilderImpl("test", States.STATE1);
-        machineManager = builder.transitions()
-                .from(States.STATE1)
-                .to(States.STATE2)
-                .on(Events.EVENT1)
-                .when((from, To, event) -> true)
-                .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
-                .transitions()
-                .from(States.STATE2)
-                .to(States.STATE3)
-                .on(Events.EVENT2)
-                .when((from, To, event) -> true)
-                .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
-                .transitions()
-                .from(States.STATE3)
-                .to(States.STATE4)
-                .on(Events.EVENT3)
-                .when((from, To, event) -> true)
-                .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
-                .transitions()
-                .from(States.STATE4)
-                .to(States.STATE1)
-                .on(Events.EVENT4)
-                .when((from, To, event) -> true)
-                .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
-                .build();
+        StateMachineManagerBuilder builder = new StateMachineManagerBuilderImpl("xxxx1", States.STATE1);
+        machineManager = builder
+            .addTransition(
+                from(States.STATE1)
+                    .to(States.STATE2)
+                    .on(Events.EVENT1)
+                    .when((from, To, event) -> true)
+                    .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
+            )
+            .addTransition(
+                from(States.STATE2)
+                    .to(States.STATE3)
+                    .on(Events.EVENT2)
+                    .when((from, To, event) -> true)
+                    .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
+            )
+            .addTransition(
+                from(States.STATE3)
+                    .to(States.STATE4)
+                    .on(Events.EVENT3)
+                    .when((from, To, event) -> true)
+                    .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
+            )
+            .addTransition(
+                from(States.STATE4)
+                    .to(States.STATE1)
+                    .on(Events.EVENT4)
+                    .when((from, To, event) -> true)
+                    .perform((from, to, event) -> System.out.println(from + " " + to + " " + event))
+            )
+            .build();
     }
 
 
@@ -55,7 +62,6 @@ public class StateMachineTest {
         stateMachine.fireEvent(Events.EVENT2);
         stateMachine.fireEvent(Events.EVENT3);
         Assert.assertEquals(States.STATE4, stateMachine.currentState());
-
 
         stateMachine = machineManager.get("xxxx1");
         Assert.assertEquals(States.STATE4, stateMachine.currentState());

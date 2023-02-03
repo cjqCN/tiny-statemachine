@@ -2,6 +2,7 @@ package com.github.cjqcn.tiny.statemachine.core.impl;
 
 import com.github.cjqcn.tiny.statemachine.core.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +23,19 @@ public class StateMachineManagerBuilderImpl<S, E> implements StateMachineManager
     }
 
     @Override
-    public TransitionsBuilder<S, E> transitions() {
+    public StateMachineManagerBuilder<S, E> addTransition(Transition<S, E> transition) {
         checkStatus();
-        return new TransitionBuilderImpl<>(transitionMap, this);
+        S from = transition.from();
+        List<Transition<S, E>> transitions = transitionMap.get(from);
+        if (transitions == null) {
+            transitions = new ArrayList<>();
+            transitionMap.put(from, transitions);
+        }
+        transitions.add(transition);
+        return this;
     }
 
-    private void checkStatus() {
+    private synchronized void checkStatus() {
         if (init) {
             throw new IllegalStateException();
         }

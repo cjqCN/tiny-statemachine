@@ -2,22 +2,16 @@ package com.github.cjqcn.tiny.statemachine.core.impl;
 
 import com.github.cjqcn.tiny.statemachine.core.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-class TransitionBuilderImpl<S, E> implements TransitionsBuilder<S, E>, From<S, E>, On<S, E>, To<S, E> {
-    private S[] froms;
+class TransitionBuilderImpl<S, E> implements TransitionBuilder<S, E>, From<S, E>, On<S, E>, To<S, E> {
+
+    private S from;
     private S to;
     private E event;
     private Action<S, E> action;
     private Guard<S, E> guard;
-    private final Map<S/* from */, List<Transition<S, E>>> transitionMap;
-    private final StateMachineManagerBuilder<S, E> stateMachineManagerBuilder;
 
-    TransitionBuilderImpl(final Map<S/* from */, List<Transition<S, E>>> transitionMap, StateMachineManagerBuilder<S, E> stateMachineManagerBuilder) {
-        this.transitionMap = transitionMap;
-        this.stateMachineManagerBuilder = stateMachineManagerBuilder;
+    TransitionBuilderImpl() {
     }
 
     @Override
@@ -48,33 +42,31 @@ class TransitionBuilderImpl<S, E> implements TransitionsBuilder<S, E>, From<S, E
     }
 
     @Override
-    public From<S, E> from(S... stateId) {
-        if (this.froms != null) {
+    public From<S, E> from(S s) {
+        if (this.from != null) {
             throw new IllegalStateException();
         }
-        this.froms = stateId;
+        this.from = s;
         return this;
     }
 
     @Override
-    public StateMachineManagerBuilder<S, E> perform(Action<S, E> action) {
+    public Transition build() {
+        return new TransitionImpl(from, to, event, guard, action);
+    }
+
+    @Override
+    public Transition<S, E> perform(Action<S, E> action) {
         if (this.action != null) {
             throw new IllegalStateException();
         }
         this.action = action;
-        for (S from : froms) {
-            List<Transition<S, E>> temp = new ArrayList<>();
-            List<Transition<S, E>> transitions = transitionMap.putIfAbsent(from, temp);
-            if (transitions == null) {
-                transitions = temp;
-            }
-            transitions.add(new TransitionImpl(from, to, event, guard, this.action));
-        }
-        return stateMachineManagerBuilder;
+        return new TransitionImpl(from, to, event, guard, this.action);
     }
 
 
     class TransitionImpl<S, E> implements Transition<S, E> {
+
         private final S from;
         private final S to;
         private final E event;
